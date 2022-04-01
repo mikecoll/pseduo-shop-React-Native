@@ -1,31 +1,43 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, Image, Pressable, Animated } from 'react-native';
 import { Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-interface ProductProps {
-  image: string;
-  title: string;
-  price: number;
-  rating: {
-    count: number;
-    rate: number;
-  };
-}
+import { ProductProps } from '../../types/types';
 
-const ProductCard: React.FC<ProductProps> = ({ image, title, price, rating }) => {
-  // console.log(rating);
+// interface ProductProps {
+//   image: string;
+//   title: string;
+//   price: number;
+//   rating: {
+//     count: number;
+//     rate: number;
+//   };
+// }
+
+const ProductCard: React.FC<ProductProps> = ({
+  image,
+  title,
+  price,
+  rating,
+  id
+}) => {
+  const [selected, setSelected] = useState<boolean>(false);
+  const addToCartAnimation = useRef(new Animated.Value(1)).current;
+
+  const navigation = useNavigation<any>();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: image }}
-          // resizeMode="cover"
-          style={{ height: '100%', width: '100%' }}
-        />
-      </View>
-
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      onPress={() => {
+        navigation.navigate('Details', {
+          productId: id
+        });
+      }}
+    >
+      <Image source={{ uri: image }} style={{ height: '100%', width: '100%' }} />
       <View style={styles.details}>
         <Text style={{ padding: 4, color: '#fff', fontSize: 16 }}>{title}</Text>
         <View style={{ padding: 4 }}>
@@ -36,14 +48,30 @@ const ProductCard: React.FC<ProductProps> = ({ image, title, price, rating }) =>
           </View>
           <Text style={{ fontSize: 20, color: '#fff' }}>${price}</Text>
         </View>
-        <View>
-          <Button mode="contained">
-            <Icon name="cart-plus" />
+        <Animated.View style={[{ transform: [{ scale: addToCartAnimation }] }]}>
+          <Button
+            mode="contained"
+            icon="cart"
+            onPress={() => {
+              Animated.sequence([
+                Animated.timing(addToCartAnimation, {
+                  toValue: 1.5,
+                  duration: 100,
+                  useNativeDriver: true
+                }),
+                Animated.timing(addToCartAnimation, {
+                  toValue: 1,
+                  duration: 350,
+                  useNativeDriver: true
+                })
+              ]).start(() => setSelected(prev => !prev));
+            }}
+          >
             Add To Cart
           </Button>
-        </View>
+        </Animated.View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -58,16 +86,10 @@ const styles = StyleSheet.create({
     width: '40%',
     height: 250
   },
-  imageContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignContent: 'center'
-    // padding: 10,
-    // height: '100%',
-    // width: '100%'
+  pressed: {
+    opacity: 0.7
   },
   details: {
-    zIndex: 10,
     backgroundColor: 'rgba(34,34,34,0.85)',
     position: 'absolute',
     bottom: 0,

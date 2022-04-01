@@ -19,7 +19,6 @@ const LoginScreen = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       await auth().signInWithCredential(googleCredential);
-      setLoading(false);
     } catch (error: any) {
       Alert.alert('Something went wrong!', error.message);
       setLoading(false);

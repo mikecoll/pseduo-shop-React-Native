@@ -6,7 +6,7 @@ export interface ProductProps {
     count: number;
     rate: number;
   };
-  category: string;
-  descriprion: string;
+  category?: string;
+  description?: string;
   id: number;
 }

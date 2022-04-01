@@ -1,18 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, Alert } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Feather';
+import { DrawerActions } from '@react-navigation/native';
 
 import ProductCard from '../components/UI/ProductCard';
+import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
 
-const Home = () => {
+const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const [items, setItems] = useState<ProductProps[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const getAllProducts = useCallback(
     async (url = 'https://fakestoreapi.com/products') => {
-      setError(null);
-
       try {
         const res = await fetch(url);
 
@@ -23,7 +25,6 @@ const Home = () => {
         const data = await res.json();
         return data;
       } catch (error: any) {
-        setError(error.message);
         Alert.alert('Something went wrong!', error.message);
       }
     },
@@ -47,7 +48,7 @@ const Home = () => {
               price: item.price,
               rating: item.rating,
               category: item.category,
-              descriprion: item.descriprion,
+              description: item.description,
               id: item.id
             });
           });
@@ -57,8 +58,8 @@ const Home = () => {
 
         setLoading(false);
       } catch (error: any) {
-        setError(error.message);
         setLoading(false);
+        Alert.alert('Something went wrong!', error.message);
       }
     },
     [getAllProducts]
@@ -69,13 +70,28 @@ const Home = () => {
   }, [setData]);
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#ffffff', '#a8a8a8']}
+      start={{ x: 1, y: 0 }}
+      end={{ x: 1, y: 0.8 }}
+      style={styles.container}
+    >
       {loading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" />
         </View>
       ) : (
         <FlatList
+          ListHeaderComponent={
+            <View>
+              <IconButton
+                icon={props => <Icon name="menu" {...props} />}
+                onPress={() => {
+                  navigation.dispatch(DrawerActions.openDrawer());
+                }}
+              />
+            </View>
+          }
           contentContainerStyle={{ paddingBottom: 20 }}
           data={items}
           renderItem={({ item }) => (
@@ -84,19 +100,21 @@ const Home = () => {
               title={item.title}
               price={item.price}
               rating={item.rating}
+              id={item.id}
             />
           )}
           numColumns={2}
         />
       )}
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d4d4d4'
+    backgroundColor: '#d4d4d4',
+    paddingTop: 50
   }
 });
 
