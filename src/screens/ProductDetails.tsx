@@ -81,7 +81,7 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
                 justifyContent: 'space-between'
               }}
             >
-              <Text style={styles.price}>${productInfo.price}</Text>
+              <Text style={styles.price}>${productInfo.price.toFixed(2)}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {[...Array(Math.round(productInfo.rating.rate))].map((_, index) => (
                   <Icon name="star" size={20} key={index} />

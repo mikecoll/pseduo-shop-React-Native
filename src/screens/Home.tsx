@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, FlatList, Alert, RefreshControl } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { IconButton } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Feather';
-import { DrawerActions } from '@react-navigation/native';
 
 import ProductCard from '../components/UI/ProductCard';
 import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
+import { firebase } from '@react-native-firebase/auth';
+import HomeHeader from '../components/HomeHeader';
 
 const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const [items, setItems] = useState<ProductProps[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const user = firebase.auth().currentUser;
 
   const getAllProducts = useCallback(
     async (url = 'https://fakestoreapi.com/products') => {
@@ -38,24 +39,7 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
       try {
         const data = await getAllProducts(url);
 
-        if (data) {
-          const loadedItems: ProductProps[] = [];
-
-          data.forEach((item: ProductProps) => {
-            loadedItems.push({
-              title: item.title,
-              image: item.image,
-              price: item.price,
-              rating: item.rating,
-              category: item.category,
-              description: item.description,
-              id: item.id
-            });
-          });
-
-          setItems(loadedItems);
-        }
-
+        setItems(data);
         setLoading(false);
       } catch (error: any) {
         setLoading(false);
@@ -69,6 +53,14 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
     setData();
   }, [setData]);
 
+  const selectCategoryHandler = (category?: string) => {
+    if (!category) {
+      setData();
+    } else {
+      setData(`https://fakestoreapi.com/products/category/${category}`);
+    }
+  };
+
   return (
     <LinearGradient
       colors={['#ffffff', '#a8a8a8']}
@@ -76,36 +68,22 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
       end={{ x: 1, y: 0.8 }}
       style={styles.container}
     >
-      {loading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : (
-        <FlatList
-          ListHeaderComponent={
-            <View>
-              <IconButton
-                icon={props => <Icon name="menu" {...props} />}
-                onPress={() => {
-                  navigation.dispatch(DrawerActions.openDrawer());
-                }}
-              />
-            </View>
-          }
-          contentContainerStyle={{ paddingBottom: 20 }}
-          data={items}
-          renderItem={({ item }) => (
-            <ProductCard
-              image={item.image}
-              title={item.title}
-              price={item.price}
-              rating={item.rating}
-              id={item.id}
-            />
-          )}
-          numColumns={2}
-        />
-      )}
+      <FlatList
+        ListHeaderComponent={<HomeHeader onSelectCategory={selectCategoryHandler} />}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={setData} />}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        data={items}
+        renderItem={({ item }) => (
+          <ProductCard
+            image={item.image}
+            title={item.title}
+            price={item.price}
+            rating={item.rating}
+            id={item.id}
+          />
+        )}
+        numColumns={2}
+      />
     </LinearGradient>
   );
 };
@@ -115,6 +93,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#d4d4d4',
     paddingTop: 50
+  },
+  cartButton: {
+    flexDirection: 'row'
   }
 });
 
