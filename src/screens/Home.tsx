@@ -12,8 +12,6 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const [items, setItems] = useState<ProductProps[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const user = firebase.auth().currentUser;
-
   const getAllProducts = useCallback(
     async (url = 'https://fakestoreapi.com/products') => {
       try {
@@ -61,6 +59,18 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
     }
   };
 
+  const searchHandler = async (searchTerm: string) => {
+    const data = await getAllProducts();
+
+    console.log(searchTerm);
+
+    const filteredItems = data.filter((item: ProductProps) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setItems(filteredItems);
+  };
+
   return (
     <LinearGradient
       colors={['#ffffff', '#a8a8a8']}
@@ -69,7 +79,12 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
       style={styles.container}
     >
       <FlatList
-        ListHeaderComponent={<HomeHeader onSelectCategory={selectCategoryHandler} />}
+        ListHeaderComponent={
+          <HomeHeader
+            onSelectCategory={selectCategoryHandler}
+            onSearch={searchHandler}
+          />
+        }
         refreshControl={<RefreshControl refreshing={loading} onRefresh={setData} />}
         contentContainerStyle={{ paddingBottom: 20 }}
         data={items}

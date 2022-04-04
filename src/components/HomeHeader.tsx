@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ interface CategoryItemButtonProps {
   category: string;
   icon: string;
   index: number;
-  onSelectCategory: (category: string) => void;
+  onSelectCategory: (category?: string) => void;
 }
 
 const CategoryItemButton = ({
@@ -27,26 +27,31 @@ const CategoryItemButton = ({
 }: CategoryItemButtonProps) => {
   return (
     <Pressable
-      onPress={() => onSelectCategory(category.toLowerCase())}
+      onPress={() => {
+        if (category === 'All Products') {
+          onSelectCategory();
+        } else {
+          onSelectCategory(category.toLowerCase());
+        }
+      }}
       style={({ pressed }) => [
         styles.categoryItem,
         index !== 0 && { marginLeft: 7 },
         pressed && { opacity: 0.5 }
       ]}
     >
-      <FontAwesomeIcon name={icon} size={20} />
+      {icon ? <FontAwesomeIcon name={icon} size={20} /> : null}
       <Text style={{ marginLeft: 3, fontSize: 16 }}>{category}</Text>
     </Pressable>
   );
 };
 
 interface HomeHeaderProps {
-  onSelectCategory: (category: string) => void;
+  onSelectCategory: (category?: string) => void;
+  onSearch: (searchTerm: string) => void;
 }
 
-const HomeHeader = ({ onSelectCategory }: HomeHeaderProps) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
+const HomeHeader = ({ onSelectCategory, onSearch }: HomeHeaderProps) => {
   const navigation = useNavigation();
 
   return (
@@ -62,7 +67,11 @@ const HomeHeader = ({ onSelectCategory }: HomeHeaderProps) => {
       </View>
 
       <View style={styles.search}>
-        <TextInput placeholder="Search" onChangeText={text => setSearchTerm(text)} />
+        <TextInput
+          style={{ width: '100%' }}
+          placeholder="Search"
+          onChangeText={text => onSearch(text)}
+        />
         <FeatherIcon name="search" size={25} color="#555" />
       </View>
 
@@ -104,7 +113,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 25,
+    paddingLeft: 15,
+    paddingRight: 40,
     marginHorizontal: 10,
     marginVertical: 20
   },
