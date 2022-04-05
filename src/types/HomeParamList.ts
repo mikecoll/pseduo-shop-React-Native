@@ -6,6 +6,7 @@ export type HomeParamList = {
   Details: {
     productId: number;
   };
+  Cart: undefined;
 };
 
 export type HomeStackNavProps<T extends keyof HomeParamList> = {

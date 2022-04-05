@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import AuthStack from './src/navigation/AuthStack';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import AppDrawer from './src/navigation/AppDrawer';
+
+import AuthStack from './src/navigation/AuthStack';
+import AppTabs from './src/navigation/AppTabs';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
+import store from './src/store/index';
 
 const App = () => {
   GoogleSignin.configure({
@@ -24,18 +28,20 @@ const App = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    console.log('user:', user);
 
     return subscriber; // unsubscribe on unmount
   }, [user]);
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        {user ? <AppDrawer /> : <AuthStack />}
-        {/* <AuthStack /> */}
-      </NavigationContainer>
-    </PaperProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <PaperProvider>
+          <NavigationContainer>
+            {user ? <AppTabs /> : <AuthStack />}
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 };
 

@@ -1,23 +1,23 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import ProfileScreen from '../screens/Profile';
 import HomeStack from './HomeStack';
+import CustomDrawer from '../components/UI/Drawer';
 
 const Drawer = createDrawerNavigator();
 
-const AppDrawer = () => {
+const HomeDrawer = () => {
   return (
     <Drawer.Navigator
+      drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
         headerShown: false,
-        swipeEnabled: false
+        swipeEdgeWidth: 0
       }}
     >
-      <Drawer.Screen name="Home" component={HomeStack} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="All Products" component={HomeStack} />
     </Drawer.Navigator>
   );
 };
 
-export default AppDrawer;
+export default HomeDrawer;

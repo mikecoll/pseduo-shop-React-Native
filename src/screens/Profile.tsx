@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
 
@@ -15,7 +15,5 @@ const Profile = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default Profile;

@@ -417,8 +417,34 @@ PODS:
   - RNGoogleSignin (7.2.2):
     - GoogleSignIn (~> 6.1.0)
     - React-Core
-  - RNReanimated (1.13.4):
+  - RNReanimated (2.5.0):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - glog
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-callinvoker
     - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
@@ -672,7 +698,7 @@ SPEC CHECKSUMS:
   RNFBAuth: 85b7ad91e3783dfde011702b2b747b1fd7be7234
   RNGestureHandler: 6e757e487a4834e7280e98e9bac66d2d9c575e9c
   RNGoogleSignin: d7f8368b82d94f1dec964785d496387ca7f19092
-  RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
+  RNReanimated: 190b6930d5d94832061278e1070bbe313e50c830
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b

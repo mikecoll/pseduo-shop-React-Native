@@ -52,6 +52,7 @@ const ProductCard: React.FC<ProductProps> = ({
           <Button
             mode="contained"
             icon="cart"
+            color="#6800ff"
             onPress={() => {
               Animated.sequence([
                 Animated.timing(addToCartAnimation, {

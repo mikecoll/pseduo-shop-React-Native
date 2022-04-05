@@ -5,11 +5,13 @@ import {
   StyleSheet,
   Alert,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Button, IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import BottomSheet from '../components/UI/BottomSheet';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
@@ -70,7 +72,7 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
               resizeMode="contain"
             />
           </View>
-          <View style={styles.detailsContainer}>
+          {/* <ScrollView style={styles.detailsContainer}>
             <Text style={styles.title}>{productInfo.title}</Text>
             <Text style={styles.description}>{productInfo.description}</Text>
             <View
@@ -108,12 +110,14 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
                 labelStyle={{ fontSize: 20 }}
                 mode="contained"
                 icon="cart"
+                color="#6800ff"
                 onPress={() => {}}
               >
                 Add to Cart
               </Button>
             </View>
-          </View>
+          </ScrollView> */}
+          <BottomSheet productInfo={productInfo} />
         </>
       )}
     </LinearGradient>

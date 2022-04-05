@@ -1,16 +1,34 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, FlatList, Alert, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  Alert,
+  RefreshControl,
+  View,
+  Text
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 import ProductCard from '../components/UI/ProductCard';
 import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
-import { firebase } from '@react-native-firebase/auth';
-import HomeHeader from '../components/HomeHeader';
+import HomeHeader from '../components/UI/HomeHeader';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '../store/uiSlice';
 
-const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
+const Home = () => {
   const [items, setItems] = useState<ProductProps[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const { category } = useSelector((state: RootStateOrAny) => state.ui);
+
+  let url = '';
+  if (category !== 'All Products') {
+    url = `https://fakestoreapi.com/products/category/${category.toLowerCase()}`;
+  }
 
   const getAllProducts = useCallback(
     async (url = 'https://fakestoreapi.com/products') => {
@@ -32,15 +50,15 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
 
   const setData = useCallback(
     async (url?: string) => {
-      setLoading(true);
+      setRefreshing(true);
 
       try {
         const data = await getAllProducts(url);
 
         setItems(data);
-        setLoading(false);
+        setRefreshing(false);
       } catch (error: any) {
-        setLoading(false);
+        setRefreshing(false);
         Alert.alert('Something went wrong!', error.message);
       }
     },
@@ -48,27 +66,30 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   );
 
   useEffect(() => {
-    setData();
-  }, [setData]);
-
-  const selectCategoryHandler = (category?: string) => {
-    if (!category) {
-      setData();
+    if (url) {
+      setData(url);
     } else {
-      setData(`https://fakestoreapi.com/products/category/${category}`);
+      setData();
     }
-  };
+  }, [setData, url]);
 
   const searchHandler = async (searchTerm: string) => {
-    const data = await getAllProducts();
+    setLoading(true);
 
-    console.log(searchTerm);
+    dispatch(uiActions.changeCategory('All Products'));
+    try {
+      const data = await getAllProducts();
 
-    const filteredItems = data.filter((item: ProductProps) =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      const filteredItems = data.filter((item: ProductProps) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-    setItems(filteredItems);
+      setItems(filteredItems);
+      setLoading(false);
+    } catch (error: any) {
+      Alert.alert('Something went wrong!', error.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,12 +102,20 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
       <FlatList
         ListHeaderComponent={
           <HomeHeader
-            onSelectCategory={selectCategoryHandler}
             onSearch={searchHandler}
+            itemsQuantity={items.length}
+            loading={loading}
           />
         }
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={setData} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        // ListEmptyComponent={
+        //   <View style={styles.emptyContainer}>
+        //     <FontAwesome5Icon name="sad-tear" size={65} />
+        //     <Text style={{ fontSize: 25, marginTop: 10 }}>No products found...</Text>
+        //   </View>
+        // }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={setData} />
+        }
         data={items}
         renderItem={({ item }) => (
           <ProductCard
@@ -111,6 +140,11 @@ const styles = StyleSheet.create({
   },
   cartButton: {
     flexDirection: 'row'
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
