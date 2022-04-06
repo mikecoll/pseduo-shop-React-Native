@@ -10,6 +10,8 @@ import Animated, {
   withSpring
 } from 'react-native-reanimated';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '../../store/cartSlice';
 
 import { ProductProps } from '../../types/types';
 
@@ -23,6 +25,8 @@ const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50;
 
 const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
   const [quantity, setQuantity] = useState<number>(1);
+
+  const dispatch = useDispatch();
 
   const translateY = useSharedValue(0);
 
@@ -82,11 +86,12 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
         >
           <Text style={styles.price}>${productInfo.price.toFixed(2)}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {[...Array(Math.round(productInfo.rating.rate))].map((_, index) => (
-              <FontAwesome5Icon name="star" size={20} key={index} />
-            ))}
+            {productInfo.rating &&
+              [...Array(Math.round(productInfo.rating.rate))].map((_, index) => (
+                <FontAwesome5Icon name="star" size={20} key={index} />
+              ))}
             <Text style={{ marginLeft: 5, fontSize: 16 }}>
-              ({productInfo.rating.count})
+              ({productInfo.rating && productInfo.rating.count})
             </Text>
           </View>
         </View>
@@ -122,7 +127,17 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
             mode="contained"
             icon="cart"
             color="#6800ff"
-            onPress={() => {}}
+            onPress={() => {
+              const item = {
+                title: productInfo.title,
+                image: productInfo.image,
+                price: productInfo.price,
+                id: productInfo.id,
+                quantity
+              };
+
+              dispatch(cartActions.addItemToCart(item));
+            }}
           >
             Add to Cart
           </Button>

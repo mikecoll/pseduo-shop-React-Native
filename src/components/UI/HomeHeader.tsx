@@ -10,44 +10,9 @@ import {
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import LogoIcon from './Logo';
 import { RootStateOrAny, useSelector } from 'react-redux';
-
-// interface CategoryItemButtonProps {
-//   category: string;
-//   icon: string;
-//   index: number;
-//   onSelectCategory: (category?: string) => void;
-// }
-
-// const CategoryItemButton = ({
-//   category,
-//   icon,
-//   index,
-//   onSelectCategory
-// }: CategoryItemButtonProps) => {
-//   return (
-//     <Pressable
-//       onPress={() => {
-//         if (category === 'All Products') {
-//           onSelectCategory();
-//         } else {
-//           onSelectCategory(category.toLowerCase());
-//         }
-//       }}
-//       style={({ pressed }) => [
-//         styles.categoryItem,
-//         index !== 0 && { marginLeft: 7 },
-//         pressed && { opacity: 0.5 }
-//       ]}
-//     >
-//       {icon ? <FontAwesomeIcon name={icon} size={20} /> : null}
-//       <Text style={{ marginLeft: 3, fontSize: 16 }}>{category}</Text>
-//     </Pressable>
-//   );
-// };
 
 interface HomeHeaderProps {
   onSearch: (searchTerm: string) => void;
@@ -59,10 +24,11 @@ const HomeHeader = ({ onSearch, itemsQuantity, loading }: HomeHeaderProps) => {
   const navigation = useNavigation<any>();
 
   const { category } = useSelector((state: RootStateOrAny) => state.ui);
+  const { totalQuantity } = useSelector((state: RootStateOrAny) => state.cart);
 
   return (
     <>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <IconButton
           icon={props => <FeatherIcon name="menu" {...props} />}
           onPress={() => {
@@ -83,10 +49,10 @@ const HomeHeader = ({ onSearch, itemsQuantity, loading }: HomeHeaderProps) => {
         >
           <FontAwesome5Icon name="shopping-cart" size={20} />
           <View style={styles.cartQuantity}>
-            <Text style={{ fontSize: 18, fontWeight: '500' }}>0</Text>
+            <Text style={{ fontSize: 18, fontWeight: '500' }}>{totalQuantity}</Text>
           </View>
         </Pressable>
-      </View>
+      </View> */}
 
       <View style={styles.search}>
         <TextInput
@@ -141,7 +107,7 @@ const styles = StyleSheet.create({
     padding: 5
   },
   cartQuantity: {
-    backgroundColor: '#d1d1d1',
+    backgroundColor: '#73ff49',
     justifyContent: 'center',
     alignItems: 'center',
     width: 30,

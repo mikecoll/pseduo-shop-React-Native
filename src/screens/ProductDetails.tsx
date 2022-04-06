@@ -53,7 +53,7 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
           }}
         />
         <IconButton
-          icon={() => <FontAwesomeIcon name="heart" size={30} color="#ff0000" />}
+          icon={() => <FontAwesomeIcon name="heart-o" size={30} color="#ff0000" />}
         />
       </View>
       {loading && (

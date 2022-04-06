@@ -1,22 +1,35 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, FlatList, Alert, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  Alert,
+  RefreshControl,
+  View,
+  Pressable,
+  Text
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import ProductCard from '../components/UI/ProductCard';
-import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
 import HomeHeader from '../components/UI/HomeHeader';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/uiSlice';
+import { IconButton } from 'react-native-paper';
+import LogoIcon from '../components/UI/Logo';
+import { DrawerActions } from '@react-navigation/native';
+import { HomeStackNavProps } from '../types/HomeParamList';
 
-const Home = () => {
+const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const [items, setItems] = useState<ProductProps[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const { category } = useSelector((state: RootStateOrAny) => state.ui);
+  const { totalQuantity } = useSelector((state: RootStateOrAny) => state.cart);
 
   let url = '';
   if (category !== 'All Products') {
@@ -92,6 +105,31 @@ const Home = () => {
       end={{ x: 1, y: 0.8 }}
       style={styles.container}
     >
+      <View style={styles.header}>
+        <IconButton
+          icon={props => <FeatherIcon name="menu" {...props} />}
+          onPress={() => {
+            navigation.dispatch(DrawerActions.openDrawer());
+          }}
+        />
+        <View style={styles.logo}>
+          <LogoIcon height={50} width={50} />
+        </View>
+        <Pressable
+          style={({ pressed }) => [
+            styles.cartButton,
+            pressed && styles.cartButtonPressed
+          ]}
+          onPress={() => {
+            navigation.navigate('Cart');
+          }}
+        >
+          <FontAwesome5Icon name="shopping-cart" size={20} />
+          <View style={styles.cartQuantity}>
+            <Text style={{ fontSize: 18, fontWeight: '500' }}>{totalQuantity}</Text>
+          </View>
+        </Pressable>
+      </View>
       <FlatList
         ListHeaderComponent={
           <HomeHeader
@@ -100,12 +138,6 @@ const Home = () => {
             loading={loading}
           />
         }
-        // ListEmptyComponent={
-        //   <View style={styles.emptyContainer}>
-        //     <FontAwesome5Icon name="sad-tear" size={65} />
-        //     <Text style={{ fontSize: 25, marginTop: 10 }}>No products found...</Text>
-        //   </View>
-        // }
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -132,13 +164,41 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10
+  },
+  cartButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    padding: 5
+  },
+  cartQuantity: {
+    backgroundColor: '#73ff49',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginLeft: 5
+  },
+  cartButtonPressed: {
+    backgroundColor: '#d0d0d0',
+    borderRadius: 15
+  },
+  logo: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: -1
+  },
   container: {
     flex: 1,
     backgroundColor: '#d4d4d4',
     paddingTop: 50
-  },
-  cartButton: {
-    flexDirection: 'row'
   },
   emptyContainer: {
     flex: 1,

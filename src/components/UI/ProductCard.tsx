@@ -1,31 +1,18 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, Pressable, Animated } from 'react-native';
 import { Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useDispatch } from 'react-redux';
 
 import { ProductProps } from '../../types/types';
+import { cartActions } from '../../store/cartSlice';
 
-// interface ProductProps {
-//   image: string;
-//   title: string;
-//   price: number;
-//   rating: {
-//     count: number;
-//     rate: number;
-//   };
-// }
-
-const ProductCard: React.FC<ProductProps> = ({
-  image,
-  title,
-  price,
-  rating,
-  id
-}) => {
+const ProductCard = ({ image, title, price, rating, id }: ProductProps) => {
   const [selected, setSelected] = useState<boolean>(false);
   const addToCartAnimation = useRef(new Animated.Value(1)).current;
 
+  const dispatch = useDispatch();
   const navigation = useNavigation<any>();
 
   return (
@@ -42,9 +29,10 @@ const ProductCard: React.FC<ProductProps> = ({
         <Text style={{ padding: 4, color: '#fff', fontSize: 16 }}>{title}</Text>
         <View style={{ padding: 4 }}>
           <View style={{ paddingHorizontal: 4, flexDirection: 'row' }}>
-            {[...Array(Math.round(rating.rate))].map((_, index) => (
-              <Icon name="star" color="#fff" size={16} key={index} />
-            ))}
+            {rating &&
+              [...Array(Math.round(rating.rate))].map((_, index) => (
+                <Icon name="star" color="#fff" size={16} key={index} />
+              ))}
           </View>
           <Text style={{ fontSize: 20, color: '#fff' }}>${price}</Text>
         </View>
@@ -66,6 +54,16 @@ const ProductCard: React.FC<ProductProps> = ({
                   useNativeDriver: true
                 })
               ]).start(() => setSelected(prev => !prev));
+
+              const item = {
+                title,
+                image,
+                price,
+                id,
+                quantity: 1
+              };
+
+              dispatch(cartActions.addItemToCart(item));
             }}
           >
             Add To Cart
