@@ -29,7 +29,7 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
 
   const dispatch = useDispatch();
   const { category } = useSelector((state: RootStateOrAny) => state.ui);
-  const { totalQuantity } = useSelector((state: RootStateOrAny) => state.cart);
+  const cartItems = useSelector((state: RootStateOrAny) => state.cart.items);
 
   let url = '';
   if (category !== 'All Products') {
@@ -126,7 +126,9 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
         >
           <FontAwesome5Icon name="shopping-cart" size={20} />
           <View style={styles.cartQuantity}>
-            <Text style={{ fontSize: 18, fontWeight: '500' }}>{totalQuantity}</Text>
+            <Text style={{ fontSize: 18, fontWeight: '500' }}>
+              {cartItems.length}
+            </Text>
           </View>
         </Pressable>
       </View>
@@ -197,7 +199,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#d4d4d4',
     paddingTop: 50
   },
   emptyContainer: {

@@ -52,7 +52,15 @@ const cartSlice = createSlice({
         // localStorage.setItem(existingItem.id, JSON.stringify(existingItem));
       }
 
-      Alert.alert('Successfully added to cart!', newItem.title);
+      Alert.alert('Successfully added to cart!', newItem.title, [
+        // { text: 'Continue Shopping' },
+        // { text: 'Go to Cart' }
+      ]);
+    },
+    increaseQuantity(state, { payload }) {
+      const curItem = state.items.find(item => item.id === payload.id);
+
+      console.log(curItem);
     }
     // removeItemFromCart(state, action) {
     //   const id = action.payload;

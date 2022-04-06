@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { IconButton } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import BottomSheet from '../components/UI/BottomSheet';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
@@ -47,7 +47,7 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
     >
       <View style={styles.headerButtons}>
         <IconButton
-          icon={props => <Icon name="arrow-left" {...props} />}
+          icon={props => <FontAwesome5Icon name="chevron-left" {...props} />}
           onPress={() => {
             navigation.goBack();
           }}
