@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  Alert,
-  RefreshControl,
-  View,
-  Text
-} from 'react-native';
+import { StyleSheet, FlatList, Alert, RefreshControl } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -114,7 +107,13 @@ const Home = () => {
         //   </View>
         // }
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={setData} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              dispatch(uiActions.changeCategory('All Products'));
+              setData();
+            }}
+          />
         }
         data={items}
         renderItem={({ item }) => (

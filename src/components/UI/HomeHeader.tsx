@@ -113,7 +113,9 @@ const HomeHeader = ({ onSearch, itemsQuantity, loading }: HomeHeaderProps) => {
           ) : null}
         </View>
         <View>
-          <Text style={styles.text}>{category}</Text>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', paddingHorizontal: 10 }}>
+            {category}
+          </Text>
         </View>
       </View>
       {loading ? (
