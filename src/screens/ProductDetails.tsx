@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  Image,
-  ActivityIndicator,
-  ScrollView
-} from 'react-native';
+import { View, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { Button, IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import BottomSheet from '../components/UI/BottomSheet';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
@@ -52,12 +45,17 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
       end={{ x: 1, y: 0.5 }}
       style={styles.container}
     >
-      <IconButton
-        icon={props => <Icon name="arrow-left" {...props} />}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+      <View style={styles.headerButtons}>
+        <IconButton
+          icon={props => <Icon name="arrow-left" {...props} />}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <IconButton
+          icon={() => <FontAwesomeIcon name="heart" size={30} color="#ff0000" />}
+        />
+      </View>
       {loading && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color="#000" />
@@ -72,51 +70,6 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
               resizeMode="contain"
             />
           </View>
-          {/* <ScrollView style={styles.detailsContainer}>
-            <Text style={styles.title}>{productInfo.title}</Text>
-            <Text style={styles.description}>{productInfo.description}</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 20,
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Text style={styles.price}>${productInfo.price.toFixed(2)}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                {[...Array(Math.round(productInfo.rating.rate))].map((_, index) => (
-                  <Icon name="star" size={20} key={index} />
-                ))}
-                <Text style={{ marginLeft: 5, fontSize: 16 }}>
-                  ({productInfo.rating.count})
-                </Text>
-              </View>
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                style={styles.button}
-                contentStyle={{ padding: 5 }}
-                mode="contained"
-                icon="heart"
-                color="#de0000"
-                onPress={() => {}}
-              >
-                Add to Favorites
-              </Button>
-              <Button
-                style={styles.button}
-                contentStyle={{ padding: 10 }}
-                labelStyle={{ fontSize: 20 }}
-                mode="contained"
-                icon="cart"
-                color="#6800ff"
-                onPress={() => {}}
-              >
-                Add to Cart
-              </Button>
-            </View>
-          </ScrollView> */}
           <BottomSheet productInfo={productInfo} />
         </>
       )}
@@ -129,6 +82,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     backgroundColor: '#333'
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10
   },
   imageContainer: {
     height: '35%'

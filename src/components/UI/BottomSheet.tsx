@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { Button } from 'react-native-paper';
+import { Button, IconButton } from 'react-native-paper';
 import Animated, {
   Extrapolate,
   interpolate,
@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
   withSpring
 } from 'react-native-reanimated';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { ProductProps } from '../../types/types';
 
@@ -22,6 +22,8 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50;
 
 const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
+  const [quantity, setQuantity] = useState<number>(1);
+
   const translateY = useSharedValue(0);
 
   const scrollTo = useCallback((destination: number) => {
@@ -81,7 +83,7 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
           <Text style={styles.price}>${productInfo.price.toFixed(2)}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {[...Array(Math.round(productInfo.rating.rate))].map((_, index) => (
-              <Icon name="star" size={20} key={index} />
+              <FontAwesome5Icon name="star" size={20} key={index} />
             ))}
             <Text style={{ marginLeft: 5, fontSize: 16 }}>
               ({productInfo.rating.count})
@@ -89,19 +91,33 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
+          <View style={styles.quantityButton}>
+            <IconButton
+              icon="minus"
+              size={25}
+              disabled={quantity === 1}
+              onPress={() => setQuantity(quantity => quantity - 1)}
+            />
+            <View
+              style={{ width: 50, justifyContent: 'center', alignItems: 'center' }}
+            >
+              <Text
+                style={{
+                  fontSize: 25,
+                  fontWeight: 'bold'
+                }}
+              >
+                {quantity}
+              </Text>
+            </View>
+            <IconButton
+              icon="plus"
+              size={25}
+              onPress={() => setQuantity(quantity => quantity + 1)}
+            />
+          </View>
           <Button
             style={styles.button}
-            contentStyle={{ padding: 5 }}
-            mode="contained"
-            icon="heart"
-            color="#de0000"
-            onPress={() => {}}
-          >
-            Add to Favorites
-          </Button>
-          <Button
-            style={styles.button}
-            contentStyle={{ padding: 10 }}
             labelStyle={{ fontSize: 20 }}
             mode="contained"
             icon="cart"
@@ -148,14 +164,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonContainer: {
-    flex: 1,
-    // justifyContent: 'flex-end',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     marginTop: 75,
     paddingBottom: 20
   },
   button: {
     borderRadius: 10,
     margin: 5
+  },
+  quantityButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 30,
+    paddingHorizontal: 5
   }
 });
 
