@@ -1,22 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions, Image, Pressable } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { useDispatch } from 'react-redux';
-import { cartActions } from '../../store/cartSlice';
+import { favsActions } from '../../store/favsSlice';
 
-interface CartItemProps {
-  id: number;
-  title: string;
-  image: string;
-  totalPrice: number;
-  quantity: number;
-}
+import { ProductProps } from '../../types/types';
 
-const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => {
-  const [curQuantity, setCurQuantity] = useState<number>(quantity);
-
+const FavoriteItem = ({ title, image, price, id }: ProductProps) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
 
@@ -40,7 +32,9 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
         <IconButton
           icon={() => <EntypoIcon name="cross" size={20} />}
           style={{ position: 'absolute', right: 10, zIndex: 10 }}
-          onPress={() => dispatch(cartActions.removeItemFromCart(id))}
+          onPress={() => {
+            dispatch(favsActions.removeFromFavorites({ title, id }));
+          }}
         />
         <View
           style={{
@@ -49,41 +43,15 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
             justifyContent: 'space-between'
           }}
         >
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+          <Text numberOfLines={3} ellipsizeMode="tail" style={styles.title}>
             {title}
           </Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-            ${totalPrice.toFixed(2)}
+            ${price.toFixed(2)}
           </Text>
-          <View style={styles.buttons}>
-            <IconButton
-              icon="minus"
-              size={20}
-              style={{
-                backgroundColor: '#fff'
-              }}
-              onPress={() => {
-                dispatch(cartActions.decreaseQuantity(id));
-                setCurQuantity(curQuantity => curQuantity - 1);
-              }}
-            />
-            <View style={{ width: 20, alignItems: 'center' }}>
-              <Text style={{ fontSize: 18 }}>{curQuantity}</Text>
-            </View>
-            <IconButton
-              icon="plus"
-              size={20}
-              color="#fff"
-              style={{ backgroundColor: '#6800ff' }}
-              onPress={() => {
-                dispatch(cartActions.increaseQuantity(id));
-                setCurQuantity(curQuantity => curQuantity + 1);
-              }}
-            />
-          </View>
         </View>
       </View>
     </Pressable>
@@ -116,13 +84,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     fontWeight: '500',
     fontSize: 18
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10
   }
 });
 
-export default CartItem;
+export default FavoriteItem;

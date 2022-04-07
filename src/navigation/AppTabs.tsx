@@ -5,6 +5,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import HomeDrawer from './HomeDrawer';
 import FavoritesScreen from '../screens/Favorites';
+import FavoritesStack from './FavoritesStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ const AppTabs = () => {
       />
       <Tab.Screen
         name="Favorites"
-        component={FavoritesScreen}
+        component={FavoritesStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.tab}>

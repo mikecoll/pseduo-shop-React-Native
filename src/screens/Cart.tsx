@@ -1,15 +1,19 @@
-import { View, Text, FlatList, StyleSheet, TextInput } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TextInput, Alert } from 'react-native';
 import React from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { Button, IconButton } from 'react-native-paper';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
 import CartItem from '../components/UI/CartItem';
+import Toast from 'react-native-toast-message';
+import { cartActions } from '../store/cartSlice';
 
 const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
   const { items, totalAmount } = useSelector((state: RootStateOrAny) => state.cart);
+
+  const dispatch = useDispatch();
 
   return (
     <LinearGradient
@@ -40,6 +44,18 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
 
         <View style={{ height: 335 }}>
           <FlatList
+            ListEmptyComponent={
+              <View
+                style={{
+                  height: 300,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Text style={{ fontSize: 18 }}>No items in your bag :(</Text>
+                <Text style={{ fontSize: 18 }}>Go and add some!</Text>
+              </View>
+            }
             data={items}
             renderItem={({ item }) => (
               <CartItem
@@ -89,7 +105,11 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
         labelStyle={{ fontSize: 18 }}
         mode="contained"
         color="#6800ff"
-        onPress={() => {}}
+        disabled={!items.length}
+        onPress={() => {
+          dispatch(cartActions.emptyCart());
+          Alert.alert('Thank you for using Pseudo Shop! 🌴🚀');
+        }}
       >
         Proceed To Checkout
       </Button>

@@ -5,22 +5,36 @@ import { IconButton } from 'react-native-paper';
 import BottomSheet from '../components/UI/BottomSheet';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';
+import { favsActions } from '../store/favsSlice';
 
 const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => {
   const [productInfo, setProductInfo] = useState<ProductProps | null>(null);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const { productId } = route.params;
+  const { favorites } = useSelector((state: RootStateOrAny) => state.favs);
+
+  useEffect(() => {
+    setIsFavorite(
+      !!favorites.find((product: ProductProps) => product.id === productId)
+    );
+  }, [favorites]);
 
   useEffect(() => {
     const getProductInfo = async () => {
       setLoading(true);
 
       try {
-        const res = await fetch(
-          `https://fakestoreapi.com/products/${route.params.productId}`
-        );
+        const res = await fetch(`https://fakestoreapi.com/products/${productId}`);
 
         if (!res.ok) {
           throw new Error('Something went wrong!');
@@ -53,7 +67,22 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
           }}
         />
         <IconButton
-          icon={() => <FontAwesomeIcon name="heart-o" size={30} color="#ff0000" />}
+          icon={() => (
+            <FontAwesomeIcon
+              name={isFavorite ? 'heart' : 'heart-o'}
+              size={30}
+              color="#ff0000"
+              onPress={() => {
+                setIsFavorite(prevState => !prevState);
+
+                if (!isFavorite) {
+                  dispatch(favsActions.addFavorite(productInfo));
+                } else {
+                  dispatch(favsActions.removeFromFavorites(productInfo));
+                }
+              }}
+            />
+          )}
         />
       </View>
       {loading && (

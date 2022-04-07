@@ -11,6 +11,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 import ProductCard from '../components/UI/ProductCard';
 import { ProductProps } from '../types/types';
@@ -21,6 +23,7 @@ import { IconButton } from 'react-native-paper';
 import LogoIcon from '../components/UI/Logo';
 import { DrawerActions } from '@react-navigation/native';
 import { HomeStackNavProps } from '../types/HomeParamList';
+import { favsActions } from '../store/favsSlice';
 
 const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const [items, setItems] = useState<ProductProps[]>([]);
@@ -30,6 +33,24 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const dispatch = useDispatch();
   const { category } = useSelector((state: RootStateOrAny) => state.ui);
   const cartItems = useSelector((state: RootStateOrAny) => state.cart.items);
+
+  useEffect(() => {
+    const getFavorites = async () => {
+      if (auth().currentUser) {
+        const favsRef = firestore()
+          .collection('users')
+          .doc(auth().currentUser?.uid)
+          .get();
+
+        const favsSnap = (await favsRef).data();
+        const favs = favsSnap?.favorites;
+
+        dispatch(favsActions.setFavorites(favs));
+      }
+    };
+
+    getFavorites();
+  }, []);
 
   let url = '';
   if (category !== 'All Products') {

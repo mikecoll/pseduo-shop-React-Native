@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { Button } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import LogoIcon from './Logo';
 import { useDispatch } from 'react-redux';

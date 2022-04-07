@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import AuthStack from './src/navigation/AuthStack';
@@ -10,6 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
 import Toast, { SuccessToast } from 'react-native-toast-message';
+import { Alert } from 'react-native';
 
 const toastConfig = {
   success: (props: any) => (
@@ -43,6 +45,42 @@ const App = () => {
 
     return subscriber; // unsubscribe on unmount
   }, [user]);
+
+  useEffect(() => {
+    const checkForUser = async () => {
+      try {
+        const allUsers: any = [];
+
+        const usersRef = await firestore().collection('users').get();
+
+        usersRef.forEach(snapshot => {
+          allUsers.push(snapshot.data());
+        });
+
+        const existingUser = allUsers.find(
+          (u: { uid: string }) => u.uid === user?.uid
+        );
+
+        if (!existingUser) {
+          addUser();
+        }
+      } catch (error: any) {
+        Alert.alert('Something went wrong!', error.message);
+      }
+    };
+
+    // Prid: klhj077
+    // o85SRoyg
+
+    checkForUser();
+
+    const addUser = async () => {
+      firestore().collection('users').doc(auth().currentUser?.uid).set({
+        uid: user?.uid,
+        favorites: []
+      });
+    };
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
