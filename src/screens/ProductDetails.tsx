@@ -6,8 +6,6 @@ import BottomSheet from '../components/UI/BottomSheet';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
 import { ProductProps } from '../types/types';

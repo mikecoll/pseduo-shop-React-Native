@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -6,7 +7,6 @@ import {
   SafeAreaView,
   Dimensions
 } from 'react-native';
-import React from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 

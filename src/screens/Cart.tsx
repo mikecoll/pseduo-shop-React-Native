@@ -7,7 +7,6 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { HomeStackNavProps } from '../types/HomeParamList';
 import CartItem from '../components/UI/CartItem';
-import Toast from 'react-native-toast-message';
 import { cartActions } from '../store/cartSlice';
 
 const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
