@@ -9,6 +9,18 @@ import AppTabs from './src/navigation/AppTabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
+import Toast, { SuccessToast } from 'react-native-toast-message';
+
+const toastConfig = {
+  success: (props: any) => (
+    <SuccessToast
+      {...props}
+      text1Style={{ fontSize: 18 }}
+      text2Style={{ fontSize: 16 }}
+      text2NumberOfLines={2}
+    />
+  )
+};
 
 const App = () => {
   GoogleSignin.configure({
@@ -38,6 +50,7 @@ const App = () => {
         <PaperProvider>
           <NavigationContainer>
             {user ? <AppTabs /> : <AuthStack />}
+            <Toast config={toastConfig} position="bottom" visibilityTime={2500} />
           </NavigationContainer>
         </PaperProvider>
       </Provider>

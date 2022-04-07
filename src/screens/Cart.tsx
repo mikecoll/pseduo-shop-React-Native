@@ -38,7 +38,7 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
           </View>
         </View>
 
-        <View style={{ height: 330 }}>
+        <View style={{ height: 335 }}>
           <FlatList
             data={items}
             renderItem={({ item }) => (
@@ -68,7 +68,7 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
         </View>
         <View style={styles.bagInfo}>
           <Text style={styles.infoText}>Subtotal</Text>
-          <Text style={styles.priceText}>${totalAmount}</Text>
+          <Text style={styles.priceText}>${totalAmount.toFixed(2)}</Text>
         </View>
         <View style={styles.bagInfo}>
           <Text style={styles.infoText}>Shipping</Text>
@@ -80,7 +80,7 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
             <Text style={{ marginRight: 10, fontSize: 16 }}>
               ({items.length} items)
             </Text>
-            <Text style={styles.priceText}>${totalAmount}</Text>
+            <Text style={styles.priceText}>${totalAmount.toFixed(2)}</Text>
           </View>
         </View>
       </View>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 90,
     marginHorizontal: 10,
-    marginVertical: 20
+    marginVertical: 15
   },
   bagInfo: {
     flexDirection: 'row',

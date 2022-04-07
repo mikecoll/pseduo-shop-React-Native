@@ -31,7 +31,7 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
         <IconButton
           icon={() => <EntypoIcon name="cross" size={20} />}
           style={{ position: 'absolute', right: 10, zIndex: 10 }}
-          onPress={() => {}}
+          onPress={() => dispatch(cartActions.removeItemFromCart(id))}
         />
         <View
           style={{
@@ -53,12 +53,11 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
             <IconButton
               icon="minus"
               size={20}
-              disabled={curQuantity === 1}
               style={{
                 backgroundColor: '#fff'
               }}
               onPress={() => {
-                dispatch(cartActions.increaseQuantity(id));
+                dispatch(cartActions.decreaseQuantity(id));
                 setCurQuantity(curQuantity => curQuantity - 1);
               }}
             />
@@ -70,6 +69,10 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
               size={20}
               color="#fff"
               style={{ backgroundColor: '#6800ff' }}
+              onPress={() => {
+                dispatch(cartActions.increaseQuantity(id));
+                setCurQuantity(curQuantity => curQuantity + 1);
+              }}
             />
           </View>
         </View>

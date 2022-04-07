@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Alert } from 'react-native';
 import { ItemProps } from '../types/types';
+import Toast from 'react-native-toast-message';
 
 interface CartStateProps {
   items: ItemProps[];
-  totalQuantity: number;
   totalAmount: number;
 }
 
@@ -12,7 +11,6 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: [],
-    totalQuantity: 0,
     totalAmount: 0
   } as CartStateProps,
   reducers: {
@@ -32,7 +30,6 @@ const cartSlice = createSlice({
       const newItem = payload;
       const existingItem = state.items.find(item => item.id === newItem.id);
 
-      state.totalQuantity += newItem.quantity;
       state.totalAmount += newItem.price;
 
       if (!existingItem) {
@@ -52,37 +49,51 @@ const cartSlice = createSlice({
         // localStorage.setItem(existingItem.id, JSON.stringify(existingItem));
       }
 
-      Alert.alert('Successfully added to cart!', newItem.title, [
-        // { text: 'Continue Shopping' },
-        // { text: 'Go to Cart' }
-      ]);
+      Toast.show({
+        type: 'success',
+        text1: '🙌 Successfully added to cart!',
+        text2: newItem.title
+      });
     },
     increaseQuantity(state, { payload }) {
-      const curItem = state.items.find(item => item.id === payload.id);
+      const itemId = payload;
+      const curItem = state.items.find(item => item.id === itemId);
 
-      console.log(curItem);
+      if (curItem) {
+        curItem.quantity++;
+        curItem.totalPrice += curItem.price;
+        state.totalAmount += curItem.price;
+      }
+    },
+    decreaseQuantity(state, { payload }) {
+      const itemId = payload;
+      const curItem = state.items.find(item => item.id === itemId);
+
+      if (curItem) {
+        if (curItem.quantity === 1) {
+          state.items = state.items.filter(item => item.id !== itemId);
+          state.totalAmount -= curItem.price;
+        } else {
+          curItem.quantity--;
+          curItem.totalPrice -= curItem.price;
+          state.totalAmount -= curItem.price;
+        }
+      }
+    },
+    removeItemFromCart(state, { payload }) {
+      const itemId = payload;
+      const curItem = state.items.find(item => item.id === itemId);
+
+      if (curItem) {
+        state.items = state.items.filter(item => item.id !== itemId);
+        state.totalAmount -= curItem.totalPrice;
+      }
+    },
+    emptyCart(state) {
+      state.items = [];
+      state.totalAmount = 0;
+      // localStorage.clear();
     }
-    // removeItemFromCart(state, action) {
-    //   const id = action.payload;
-    //   const existingItem = state.items.find(item => item.id === id);
-    //   state.totalQuantity--;
-    //   if (existingItem.quantity === 1) {
-    //     state.items = state.items.filter(item => item.id !== id);
-    //     state.totalAmount -= existingItem.price;
-    //     localStorage.removeItem(existingItem.id);
-    //   } else {
-    //     existingItem.quantity--;
-    //     existingItem.totalPrice -= existingItem.price;
-    //     state.totalAmount -= existingItem.price;
-    //     localStorage.setItem(existingItem.id, JSON.stringify(existingItem));
-    //   }
-    // },
-    // emptyCart(state) {
-    //   state.items = [];
-    //   state.totalQuantity = 0;
-    //   state.totalAmount = 0;
-    //   localStorage.clear();
-    // }
   }
 });
 
