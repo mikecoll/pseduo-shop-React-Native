@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { RootStateOrAny, useSelector } from 'react-redux';
 
@@ -9,7 +9,7 @@ interface HomeHeaderProps {
   loading: boolean;
 }
 
-const HomeHeader = ({ onSearch, itemsQuantity, loading }: HomeHeaderProps) => {
+const HomeHeader = ({ onSearch, itemsQuantity }: HomeHeaderProps) => {
   const { category } = useSelector((state: RootStateOrAny) => state.ui);
 
   return (
