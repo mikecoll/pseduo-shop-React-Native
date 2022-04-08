@@ -64,24 +64,26 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
             navigation.goBack();
           }}
         />
-        <IconButton
-          icon={() => (
-            <FontAwesomeIcon
-              name={isFavorite ? 'heart' : 'heart-o'}
-              size={30}
-              color="#ff0000"
-              onPress={() => {
-                setIsFavorite(prevState => !prevState);
+        {productInfo && (
+          <IconButton
+            icon={() => (
+              <FontAwesomeIcon
+                name={isFavorite ? 'heart' : 'heart-o'}
+                size={30}
+                color="#ff0000"
+                onPress={() => {
+                  setIsFavorite(prevState => !prevState);
 
-                if (!isFavorite) {
-                  dispatch(favsActions.addFavorite(productInfo));
-                } else {
-                  dispatch(favsActions.removeFromFavorites(productInfo));
-                }
-              }}
-            />
-          )}
-        />
+                  if (!isFavorite) {
+                    dispatch(favsActions.addFavorite(productInfo));
+                  } else {
+                    dispatch(favsActions.removeFromFavorites(productInfo));
+                  }
+                }}
+              />
+            )}
+          />
+        )}
       </View>
       {loading && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

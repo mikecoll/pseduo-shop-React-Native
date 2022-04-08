@@ -43,16 +43,6 @@ const HomeHeader = ({ onSearch, itemsQuantity, loading }: HomeHeaderProps) => {
           </Text>
         </View>
       </View>
-      {loading ? (
-        <View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            top: 160
-          }}
-        >
-          <ActivityIndicator size="large" />
-        </View>
-      ) : null}
     </>
   );
 };

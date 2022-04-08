@@ -82,7 +82,10 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
       try {
         const data = await getAllProducts(url);
 
-        setItems(data);
+        if (data) {
+          setItems(data);
+        }
+
         setRefreshing(false);
       } catch (error: any) {
         setRefreshing(false);

@@ -4,7 +4,7 @@
 
 ## About
 
-Pseudo Shop (one of my previous projects) reimagined as a native mobile application.
+Pseudo Shop (one of my earlier projects) reimagined as a native mobile application.
 
 ## Tech Stack
 
@@ -15,12 +15,15 @@ Pseudo Shop (one of my previous projects) reimagined as a native mobile applicat
 ## Key Features
 
 - Sign in with Google or Apple account
-
+  ![Sign in with Google or Apple](https://media.giphy.com/media/AlkMQn0sa5d6btRu0T/giphy.gif)
 - Browse products, search bar and different categories
-
+  ![Browse products](https://media.giphy.com/media/Nnba8LonB0zwxvd4Nh/giphy.gif)
 - See product details
-
-- Add to favorites or to the cart
+  ![See product details](https://media.giphy.com/media/x9gEBJTjLYgbbkZpo6/giphy.gif)
+- Favorites
+  ![Add to favorites](https://media.giphy.com/media/6RUe0xhgAFvYfkFxWx/giphy.gif)
+- Shopping cart
+  ![Shopping cart](https://media.giphy.com/media/5orkxATH8agY1TTdC5/giphy.gif)
 
 ## Usage
 

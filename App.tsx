@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { Alert, LogBox } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Toast, { SuccessToast } from 'react-native-toast-message';
+import { Provider } from 'react-redux';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import AuthStack from './src/navigation/AuthStack';
 import AppTabs from './src/navigation/AppTabs';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Provider } from 'react-redux';
 import store from './src/store/index';
-import Toast, { SuccessToast } from 'react-native-toast-message';
-import { Alert } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const toastConfig = {
   success: (props: any) => (
@@ -68,9 +70,6 @@ const App = () => {
         Alert.alert('Something went wrong!', error.message);
       }
     };
-
-    // Prid: klhj077
-    // o85SRoyg
 
     checkForUser();
 
