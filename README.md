@@ -23,7 +23,7 @@ Pseudo Shop (one of my earlier projects) reimagined as a native mobile applicati
 - Favorites <br />
   ![Add to favorites](https://media.giphy.com/media/6RUe0xhgAFvYfkFxWx/giphy.gif)
 - Shopping cart <br />
-  ![Shopping cart](https://media.giphy.com/media/5orkxATH8agY1TTdC5/giphy.gif)
+  ![Shopping cart](https://media.giphy.com/media/09oYH93KhSaJp1i5Ka/giphy.gif)
 
 ## Usage
 
