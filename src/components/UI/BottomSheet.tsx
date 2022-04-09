@@ -10,7 +10,7 @@ import Animated, {
   withSpring
 } from 'react-native-reanimated';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import { useDispatch } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { cartActions } from '../../store/cartSlice';
 
 import { ProductProps } from '../../types/types';
@@ -27,6 +27,8 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   const dispatch = useDispatch();
+
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   const translateY = useSharedValue(0);
 
@@ -72,10 +74,20 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <Animated.View style={[styles.detailsContainer, rBottomSheetStyle]}>
+      <Animated.View
+        style={[
+          styles.detailsContainer,
+          rBottomSheetStyle,
+          { backgroundColor: darkMode ? '#3c3c3c' : '#fff' }
+        ]}
+      >
         <View style={styles.line} />
-        <Text style={styles.title}>{productInfo.title}</Text>
-        <Text style={styles.description}>{productInfo.description}</Text>
+        <Text style={[styles.title, { color: darkMode ? '#fff' : '#000' }]}>
+          {productInfo.title}
+        </Text>
+        <Text style={[styles.description, { color: darkMode ? '#fff' : '#000' }]}>
+          {productInfo.description}
+        </Text>
         <View
           style={{
             flexDirection: 'row',
@@ -84,19 +96,37 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
             justifyContent: 'space-between'
           }}
         >
-          <Text style={styles.price}>${productInfo.price.toFixed(2)}</Text>
+          <Text style={[styles.price, { color: darkMode ? '#fff' : '#000' }]}>
+            ${productInfo.price.toFixed(2)}
+          </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {productInfo.rating &&
               [...Array(Math.round(productInfo.rating.rate))].map((_, index) => (
-                <FontAwesome5Icon name="star" size={20} key={index} />
+                <FontAwesome5Icon
+                  name="star"
+                  size={20}
+                  color={darkMode ? '#fff' : '#000'}
+                  key={index}
+                />
               ))}
-            <Text style={{ marginLeft: 5, fontSize: 16 }}>
+            <Text
+              style={{
+                marginLeft: 5,
+                fontSize: 16,
+                color: darkMode ? '#fff' : '#000'
+              }}
+            >
               ({productInfo.rating && productInfo.rating.count})
             </Text>
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <View style={styles.quantityButton}>
+          <View
+            style={[
+              styles.quantityButton,
+              { borderColor: darkMode ? '#fff' : '#000' }
+            ]}
+          >
             <IconButton
               icon="minus"
               size={25}
@@ -109,7 +139,8 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
               <Text
                 style={{
                   fontSize: 25,
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  color: darkMode ? '#fff' : '#000'
                 }}
               >
                 {quantity}
@@ -126,7 +157,7 @@ const BottomSheetView = ({ productInfo }: BottomSheetProps) => {
             labelStyle={{ fontSize: 20 }}
             mode="contained"
             icon="cart"
-            color="#6800ff"
+            color={darkMode ? '#d1b3ff' : '#6800ff'}
             onPress={() => {
               const item = {
                 title: productInfo.title,
@@ -152,7 +183,6 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     top: SCREEN_HEIGHT,
     width: '100%',
-    backgroundColor: '#fff',
     position: 'absolute',
     borderRadius: 25,
     paddingHorizontal: 20

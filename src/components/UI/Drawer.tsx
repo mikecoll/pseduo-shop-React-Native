@@ -3,7 +3,7 @@ import { View, Text, Image, Pressable } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import LinearGradient from 'react-native-linear-gradient';
 import LogoIcon from './Logo';
-import { useDispatch } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../../store/uiSlice';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
@@ -28,10 +28,10 @@ const DrawerButton = ({ category, icon, onPress }: DrawerButtonProps) => {
           borderRadius: 20,
           justifyContent: 'space-between',
           alignItems: 'center',
-          backgroundColor: 'rgba(104,0,255, 0.1)'
+          backgroundColor: '#d1b3ff'
         },
         pressed && {
-          backgroundColor: 'rgba(104,0,255, 0.5)'
+          opacity: 0.7
         }
       ]}
     >
@@ -46,6 +46,8 @@ const Drawer = (props: any) => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   useEffect(() => {
     const user = auth().currentUser;
@@ -68,10 +70,14 @@ const Drawer = (props: any) => {
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
         {...props}
-        style={{ borderBottomWidth: 1, borderBottomColor: 'gray' }}
+        style={{
+          borderBottomWidth: 1,
+          borderBottomColor: 'gray',
+          backgroundColor: darkMode ? '#3c3c3c' : '#fff'
+        }}
       >
         <LinearGradient
-          colors={['#ffffff', '#a8a8a8']}
+          colors={darkMode ? ['#3c3c3c', '#bababa'] : ['#ffffff', '#a8a8a8']}
           start={{ x: 1, y: 0 }}
           end={{ x: 1, y: 0.8 }}
         >
@@ -83,11 +89,19 @@ const Drawer = (props: any) => {
             }}
           >
             <View>
-              <LogoIcon height={60} width={50} />
+              <LogoIcon height={60} width={50} color={darkMode ? '#fff' : '#000'} />
             </View>
             <View>
-              <Text style={{ fontSize: 30 }}>Pseudo Shop</Text>
-              <Text style={{ fontSize: 15, color: '#333', textAlign: 'center' }}>
+              <Text style={{ fontSize: 30, color: darkMode ? '#fff' : '#000' }}>
+                Pseudo Shop
+              </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: darkMode ? '#ccc' : '#333',
+                  textAlign: 'center'
+                }}
+              >
                 Free shipping worldwide
               </Text>
             </View>
@@ -144,10 +158,10 @@ const Drawer = (props: any) => {
             paddingVertical: 10,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'rgba(104,0,255, 0.1)'
+            backgroundColor: '#d1b3ff'
           },
           pressed && {
-            backgroundColor: 'rgba(104,0,255, 0.5)'
+            opacity: 0.7
           }
         ]}
       >

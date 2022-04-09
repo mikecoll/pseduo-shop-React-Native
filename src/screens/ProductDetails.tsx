@@ -20,6 +20,7 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
 
   const { productId } = route.params;
   const { favorites } = useSelector((state: RootStateOrAny) => state.favs);
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   useEffect(() => {
     setIsFavorite(
@@ -52,7 +53,7 @@ const ProductDetails = ({ route, navigation }: HomeStackNavProps<'Details'>) => 
 
   return (
     <LinearGradient
-      colors={['#ffffff', '#a8a8a8']}
+      colors={darkMode ? ['#3c3c3c', '#bababa'] : ['#ffffff', '#a8a8a8']}
       start={{ x: 1, y: 0 }}
       end={{ x: 1, y: 0.5 }}
       style={styles.container}

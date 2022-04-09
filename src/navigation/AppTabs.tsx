@@ -4,12 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import HomeDrawer from './HomeDrawer';
-import FavoritesScreen from '../screens/Favorites';
 import FavoritesStack from './FavoritesStack';
+import { RootStateOrAny, useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 const AppTabs = () => {
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -17,13 +19,7 @@ const AppTabs = () => {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
-          // position: 'absolute',
-          // bottom: 25,
-          // left: 20,
-          // right: 20,
-          backgroundColor: '#fff',
-          borderRadius: 15,
-          // height: 70,
+          backgroundColor: darkMode ? '#3c3c3c' : '#fff',
           alignItems: 'center',
           ...styles.shadow
         }
@@ -38,9 +34,26 @@ const AppTabs = () => {
               <FontAwesomeIcon
                 name="home"
                 size={30}
-                color={focused ? '#6800ff' : 'gray'}
+                color={
+                  focused && darkMode
+                    ? '#d1b3ff'
+                    : focused && !darkMode
+                    ? '#6800ff'
+                    : 'gray'
+                }
               />
-              <Text style={{ color: focused ? '#6800ff' : 'gray' }}>Home</Text>
+              <Text
+                style={{
+                  color:
+                    focused && darkMode
+                      ? '#d1b3ff'
+                      : focused && !darkMode
+                      ? '#6800ff'
+                      : 'gray'
+                }}
+              >
+                Home
+              </Text>
             </View>
           )
         }}
@@ -54,9 +67,26 @@ const AppTabs = () => {
               <FontAwesomeIcon
                 name={focused ? 'heart' : 'heart-o'}
                 size={30}
-                color={focused ? '#6800ff' : 'gray'}
+                color={
+                  focused && darkMode
+                    ? '#d1b3ff'
+                    : focused && !darkMode
+                    ? '#6800ff'
+                    : 'gray'
+                }
               />
-              <Text style={{ color: focused ? '#6800ff' : 'gray' }}>Favorites</Text>
+              <Text
+                style={{
+                  color:
+                    focused && darkMode
+                      ? '#d1b3ff'
+                      : focused && !darkMode
+                      ? '#6800ff'
+                      : 'gray'
+                }}
+              >
+                Favorites
+              </Text>
             </View>
           )
         }}

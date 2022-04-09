@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, LogBox } from 'react-native';
+import { Alert, Appearance, LogBox } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Toast, { SuccessToast } from 'react-native-toast-message';
-import { Provider } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import AuthStack from './src/navigation/AuthStack';
 import AppTabs from './src/navigation/AppTabs';
-import store from './src/store/index';
+import { uiActions } from './src/store/uiSlice';
 
 LogBox.ignoreAllLogs();
 
@@ -27,6 +27,14 @@ const toastConfig = {
 };
 
 const App = () => {
+  // const [darkMode, setDarkMode] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  Appearance.addChangeListener(scheme => {
+    dispatch(uiActions.setTheme(scheme.colorScheme));
+  });
+
   GoogleSignin.configure({
     webClientId:
       '200517880835-oe3r92cv3381r93pkfvjh22p9bu360qf.apps.googleusercontent.com'
@@ -83,14 +91,12 @@ const App = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <PaperProvider>
-          <NavigationContainer>
-            {user ? <AppTabs /> : <AuthStack />}
-            <Toast config={toastConfig} position="bottom" visibilityTime={2500} />
-          </NavigationContainer>
-        </PaperProvider>
-      </Provider>
+      <PaperProvider>
+        <NavigationContainer>
+          {user ? <AppTabs /> : <AuthStack />}
+          <Toast config={toastConfig} position="bottom" visibilityTime={2500} />
+        </NavigationContainer>
+      </PaperProvider>
     </GestureHandlerRootView>
   );
 };

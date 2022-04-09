@@ -10,13 +10,13 @@ interface HomeHeaderProps {
 }
 
 const HomeHeader = ({ onSearch, itemsQuantity }: HomeHeaderProps) => {
-  const { category } = useSelector((state: RootStateOrAny) => state.ui);
+  const { darkMode, category } = useSelector((state: RootStateOrAny) => state.ui);
 
   return (
     <>
       <View style={styles.search}>
         <TextInput
-          style={{ width: '100%' }}
+          style={{ width: '100%', color: '#000' }}
           placeholder="Search all prodcuts"
           onChangeText={text => onSearch(text)}
         />

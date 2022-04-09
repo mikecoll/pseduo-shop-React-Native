@@ -31,7 +31,7 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const { category } = useSelector((state: RootStateOrAny) => state.ui);
+  const { darkMode, category } = useSelector((state: RootStateOrAny) => state.ui);
   const cartItems = useSelector((state: RootStateOrAny) => state.cart.items);
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
 
   return (
     <LinearGradient
-      colors={['#ffffff', '#a8a8a8']}
+      colors={darkMode ? ['#3c3c3c', '#bababa'] : ['#ffffff', '#a8a8a8']}
       start={{ x: 1, y: 0 }}
       end={{ x: 1, y: 0.8 }}
       style={styles.container}
@@ -137,7 +137,7 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
           }}
         />
         <View style={styles.logo}>
-          <LogoIcon height={50} width={50} />
+          <LogoIcon height={50} width={50} color={darkMode ? '#fff' : '#000'} />
         </View>
         <Pressable
           style={({ pressed }) => [
@@ -148,7 +148,11 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
             navigation.navigate('Cart');
           }}
         >
-          <FontAwesome5Icon name="shopping-cart" size={20} />
+          <FontAwesome5Icon
+            name="shopping-cart"
+            size={20}
+            color={darkMode ? '#fff' : '#000'}
+          />
           <View style={styles.cartQuantity}>
             <Text style={{ fontSize: 18, fontWeight: '500' }}>
               {cartItems.length}
