@@ -27,13 +27,17 @@ const toastConfig = {
 };
 
 const App = () => {
-  // const [darkMode, setDarkMode] = useState<boolean>(false);
-
   const dispatch = useDispatch();
 
   Appearance.addChangeListener(scheme => {
     dispatch(uiActions.setTheme(scheme.colorScheme));
   });
+
+  useEffect(() => {
+    const colorScheme = Appearance.getColorScheme();
+
+    dispatch(uiActions.setTheme(colorScheme));
+  }, []);
 
   GoogleSignin.configure({
     webClientId:
