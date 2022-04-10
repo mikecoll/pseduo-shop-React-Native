@@ -18,6 +18,7 @@ const HomeHeader = ({ onSearch, itemsQuantity }: HomeHeaderProps) => {
         <TextInput
           style={{ width: '100%', color: '#000' }}
           placeholder="Search all prodcuts"
+          placeholderTextColor="gray"
           onChangeText={text => onSearch(text)}
         />
         <FeatherIcon name="search" size={25} color="#555" />
