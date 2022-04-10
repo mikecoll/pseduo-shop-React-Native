@@ -11,21 +11,30 @@ import { RootStateOrAny, useSelector } from 'react-redux';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 import FavoriteItem from '../components/UI/FavoriteItem';
+import LinearGradient from 'react-native-linear-gradient';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const Favorites = () => {
   const { favorites } = useSelector((state: RootStateOrAny) => state.favs);
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <LinearGradient
+      colors={darkMode ? ['#3c3c3c', '#bababa'] : ['#ffffff', '#a8a8a8']}
+      start={{ x: 1, y: 0 }}
+      end={{ x: 1, y: 0.8 }}
+      style={styles.container}
+    >
       <View>
-        <Text style={styles.title}>Favorites</Text>
+        <Text style={[styles.title, { color: darkMode ? '#fff' : '#000' }]}>
+          Favorites
+        </Text>
       </View>
 
       <FlatList
         contentContainerStyle={{
-          height: SCREEN_HEIGHT
+          height: SCREEN_HEIGHT - 130
         }}
         ListEmptyComponent={
           <View
@@ -41,8 +50,12 @@ const Favorites = () => {
               color="#ff0000"
               style={{ marginBottom: 20 }}
             />
-            <Text style={{ fontSize: 18 }}>No favorite items :(</Text>
-            <Text style={{ fontSize: 18 }}>Go and add some!</Text>
+            <Text style={{ fontSize: 18, color: darkMode ? '#fff' : '#000' }}>
+              No favorite items :(
+            </Text>
+            <Text style={{ fontSize: 18, color: darkMode ? '#fff' : '#000' }}>
+              Go and add some!
+            </Text>
           </View>
         }
         data={favorites}
@@ -55,15 +68,14 @@ const Favorites = () => {
           />
         )}
       />
-    </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    paddingTop: 50,
     justifyContent: 'center'
-    // alignItems: 'center'
   },
   title: {
     fontSize: 25,

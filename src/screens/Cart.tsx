@@ -11,12 +11,13 @@ import { cartActions } from '../store/cartSlice';
 
 const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
   const { items, totalAmount } = useSelector((state: RootStateOrAny) => state.cart);
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   const dispatch = useDispatch();
 
   return (
     <LinearGradient
-      colors={['#ffffff', '#a8a8a8']}
+      colors={darkMode ? ['#3c3c3c', '#bababa'] : ['#ffffff', '#a8a8a8']}
       start={{ x: 1, y: 0 }}
       end={{ x: 1, y: 0.8 }}
       style={styles.container}
@@ -37,7 +38,9 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
               zIndex: -1
             }}
           >
-            <Text style={{ fontSize: 20 }}>Shopping Bag</Text>
+            <Text style={{ fontSize: 20, color: darkMode ? '#fff' : '#000' }}>
+              Shopping Bag
+            </Text>
           </View>
         </View>
 
@@ -51,8 +54,12 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
                   alignItems: 'center'
                 }}
               >
-                <Text style={{ fontSize: 18 }}>No items in your bag :(</Text>
-                <Text style={{ fontSize: 18 }}>Go and add some!</Text>
+                <Text style={{ fontSize: 18, color: darkMode ? '#fff' : '#000' }}>
+                  No items in your bag :(
+                </Text>
+                <Text style={{ fontSize: 18, color: darkMode ? '#fff' : '#000' }}>
+                  Go and add some!
+                </Text>
               </View>
             }
             data={items}
@@ -71,9 +78,11 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
           <TextInput
             style={{ width: '100%', fontSize: 18 }}
             placeholder="Promo Code"
+            placeholderTextColor="gray"
           />
           <Button
             mode="contained"
+            color={darkMode ? '#d1b3ff' : '#6800ff'}
             style={{
               borderRadius: 15
             }}
@@ -103,7 +112,7 @@ const Cart = ({ navigation }: HomeStackNavProps<'Cart'>) => {
         style={{ marginHorizontal: 20, borderRadius: 15 }}
         labelStyle={{ fontSize: 18 }}
         mode="contained"
-        color="#6800ff"
+        color={darkMode ? '#d1b3ff' : '#6800ff'}
         disabled={!items.length}
         onPress={() => {
           dispatch(cartActions.emptyCart());

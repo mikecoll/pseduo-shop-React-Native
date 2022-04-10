@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, Pressable, Animated } from 'react-native';
 import { Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { ProductProps } from '../../types/types';
 import { cartActions } from '../../store/cartSlice';
@@ -14,6 +14,8 @@ const ProductCard = ({ image, title, price, rating, id }: ProductProps) => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
+
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   return (
     <Pressable
@@ -40,7 +42,7 @@ const ProductCard = ({ image, title, price, rating, id }: ProductProps) => {
           <Button
             mode="contained"
             icon="cart"
-            color="#6800ff"
+            color={darkMode ? '#d1b3ff' : '#6800ff'}
             onPress={() => {
               Animated.sequence([
                 Animated.timing(addToCartAnimation, {

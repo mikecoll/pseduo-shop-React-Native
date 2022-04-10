@@ -32,13 +32,24 @@ const HomeHeader = ({ onSearch, itemsQuantity }: HomeHeaderProps) => {
       >
         {itemsQuantity ? (
           <View>
-            <Text style={styles.text}>Found</Text>
-            <Text style={styles.text}>{itemsQuantity} Products</Text>
+            <Text style={[styles.text, { color: darkMode ? '#fff' : '#000' }]}>
+              Found
+            </Text>
+            <Text style={[styles.text, { color: darkMode ? '#fff' : '#000' }]}>
+              {itemsQuantity} Products
+            </Text>
           </View>
         ) : null}
 
         <View>
-          <Text style={{ fontSize: 22, fontWeight: 'bold', paddingHorizontal: 10 }}>
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: 'bold',
+              paddingHorizontal: 10,
+              color: darkMode ? '#fff' : '#000'
+            }}
+          >
             {category}
           </Text>
         </View>

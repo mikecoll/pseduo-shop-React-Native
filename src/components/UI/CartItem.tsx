@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, Pressable } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { useDispatch } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { cartActions } from '../../store/cartSlice';
 
 interface CartItemProps {
@@ -19,6 +19,8 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
 
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
+
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   return (
     <Pressable
@@ -38,7 +40,9 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
         }}
       >
         <IconButton
-          icon={() => <EntypoIcon name="cross" size={20} />}
+          icon={() => (
+            <EntypoIcon name="cross" size={20} color={darkMode ? '#fff' : '#000'} />
+          )}
           style={{ position: 'absolute', right: 10, zIndex: 10 }}
           onPress={() => dispatch(cartActions.removeItemFromCart(id))}
         />
@@ -49,13 +53,23 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
             justifyContent: 'space-between'
           }}
         >
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.title, { color: darkMode ? '#fff' : '#000' }]}
+          >
             {title}
           </Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: darkMode ? '#fff' : '#000'
+            }}
+          >
             ${totalPrice.toFixed(2)}
           </Text>
           <View style={styles.buttons}>
@@ -63,7 +77,7 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
               icon="minus"
               size={20}
               style={{
-                backgroundColor: '#fff'
+                backgroundColor: darkMode ? 'gray' : '#fff'
               }}
               onPress={() => {
                 dispatch(cartActions.decreaseQuantity(id));
@@ -77,7 +91,7 @@ const CartItem = ({ id, title, image, totalPrice, quantity }: CartItemProps) => 
               icon="plus"
               size={20}
               color="#fff"
-              style={{ backgroundColor: '#6800ff' }}
+              style={{ backgroundColor: darkMode ? '#d1b3ff' : '#6800ff' }}
               onPress={() => {
                 dispatch(cartActions.increaseQuantity(id));
                 setCurQuantity(curQuantity => curQuantity + 1);
