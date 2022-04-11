@@ -23,16 +23,17 @@ const favsSlice = createSlice({
           (item: ItemProps) => item.id === payload.id
         );
 
+        const updatedFavs = [...state.favorites, payload];
+
+        console.log(updatedFavs);
+
         if (!existingItem) {
-          state.favorites = [...state.favorites, payload];
+          state.favorites = updatedFavs;
         }
 
-        firestore()
-          .collection('users')
-          .doc(auth().currentUser?.uid)
-          .update({
-            favorites: [...state.favorites, payload]
-          });
+        firestore().collection('users').doc(auth().currentUser?.uid).update({
+          favorites: updatedFavs
+        });
 
         Toast.show({
           type: 'success',

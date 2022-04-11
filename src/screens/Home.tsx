@@ -38,8 +38,6 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
 
   useEffect(() => {
     const getFavorites = async () => {
-      console.log('user:', user);
-
       if (user) {
         const favsRef = firestore().collection('users').doc(user?.uid).get();
 
