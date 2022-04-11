@@ -6,9 +6,12 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import LinearGradient from 'react-native-linear-gradient';
 
 import LogoIcon from '../components/UI/Logo';
+import { RootStateOrAny, useSelector } from 'react-redux';
 
 const LoginScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { darkMode } = useSelector((state: RootStateOrAny) => state.ui);
 
   // TODO: Manual install google auth for Android
   const signInWithGoogle = async () => {
@@ -27,18 +30,22 @@ const LoginScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#ffffff', '#a8a8a8']}
+      colors={darkMode ? ['#3c3c3c', '#bababa'] : ['#ffffff', '#a8a8a8']}
       start={{ x: 1, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
       <View style={styles.logoContainer}>
         <View>
-          <LogoIcon height={100} width={70} />
+          <LogoIcon height={100} width={70} color={darkMode ? '#fff' : '#000'} />
         </View>
         <View>
-          <Text style={{ fontSize: 50 }}>Pseudo Shop</Text>
-          <Text style={styles.text}>Free shipping worldwide</Text>
+          <Text style={{ fontSize: 50, color: darkMode ? '#fff' : '#000' }}>
+            Pseudo Shop
+          </Text>
+          <Text style={[styles.text, { color: darkMode ? '#fff' : '#000' }]}>
+            Free shipping worldwide
+          </Text>
         </View>
       </View>
       <View style={{ width: '80%' }}>
@@ -47,6 +54,7 @@ const LoginScreen = () => {
           mode="contained"
           loading={loading}
           icon="google"
+          color={darkMode ? '#d1b3ff' : '#6800ff'}
           style={{ margin: 5 }}
         >
           Log In With Google
