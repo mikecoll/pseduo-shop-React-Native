@@ -34,23 +34,26 @@ const Home = ({ navigation }: HomeStackNavProps<'Home'>) => {
   const { darkMode, category } = useSelector((state: RootStateOrAny) => state.ui);
   const cartItems = useSelector((state: RootStateOrAny) => state.cart.items);
 
+  const user = auth().currentUser;
+
   useEffect(() => {
     const getFavorites = async () => {
-      if (auth().currentUser) {
-        const favsRef = firestore()
-          .collection('users')
-          .doc(auth().currentUser?.uid)
-          .get();
+      console.log('user:', user);
+
+      if (user) {
+        const favsRef = firestore().collection('users').doc(user?.uid).get();
 
         const favsSnap = (await favsRef).data();
         const favs = favsSnap?.favorites;
 
-        dispatch(favsActions.setFavorites(favs));
+        if (favs) {
+          dispatch(favsActions.setFavorites(favs));
+        }
       }
     };
 
     getFavorites();
-  }, []);
+  }, [user]);
 
   let url = '';
   if (category !== 'All Products') {

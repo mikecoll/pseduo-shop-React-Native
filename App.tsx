@@ -91,7 +91,7 @@ const App = () => {
         favorites: []
       });
     };
-  }, []);
+  }, [user]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
