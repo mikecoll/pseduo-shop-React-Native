@@ -2,6 +2,11 @@
 
 ### iOS + Android
 
+## TODO
+
+- Add support for Google sign-in on Android
+- Add support for Apple sign-in on Android and iOS
+
 ## About
 
 Pseudo Shop (one of my earlier projects) reimagined as a native mobile application.
